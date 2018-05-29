@@ -69,6 +69,76 @@ Redux中的middleware其实就像是给你提供一个在action发出到实际re
         }
         store.dispatch = dispatchWithCreshReporting;
     ```
-    我们在log之后加上这段代码
+    我们在log之后加上这段代码, 其实就是在log那件事替换完之后，我们再次替换store上的`dispatch`，其实这个时候，我们拿到的`next1`已经是log那个替换过后的`dispatch`方法了，里面有打印log的逻辑，所以，我们在后面通过`store.dispatch`去发送action时，每一个action都会先经过Crash Reporting包装的`dispacth`方法（其中包含了Crash Report的逻辑），然后再经过log包装过后的`dispatch`方法（其中包含了打印log的逻辑）。这其实就是redux middleware的基本思想。
+
+3. 当然，redux本身给我们提供了包装过后的工具方法来专门应用middleware。其中也不是简单粗暴的替换store上的dispatch了。这个方法即为`applyMiddleware`。
+
+4. 官方的doc也给出了一个关于`applyMiddleware`的一个简单粗暴的直接替换`dispatch`的一个示例，如下：
+    ``` javascript
+        function applyMiddlewareByMonkeypatching(store, middlewares) {
+            middlewares = middlewares.slice()
+            middlewares.reverse()
+        ​
+            // Transform dispatch function with each middleware.
+            middlewares.forEach(middleware =>
+                store.dispatch = middleware(store)
+            )
+        }
+    ```
+    关于先逆序middlewares再进行替换，这里主要是为了，让middleware的执行顺序按照我么传给他的array顺序来进行。就像我们上面直接替换的那个例子，越往后面进行替换`dispatch`的在执行过程中先运行。
+
+5. 当然，官放的具体实现中不是这么简单粗暴的直接替换的方式，因为一来不够优雅，这种方式在链式的调用过程中有可能出现问题。比如某一个middleware并不是同步执行的，这样在进行`store.dispatch = middleware(store)`就有可能到下一个middleware时，`store.dispatch`还没有被替换。因此，官方的middleware是接受一个`next`的参数来，来拿到dispatch，并不是直接从store上对dispatch进行操作的。
+
+6. 一般一个标准的middleware是这个样子的，我们使用最初的log的那个middleware来举例，让它接受一个`next`(就是一个下一个的dispatch方法)，再返回一个`dispatch`方法。
+    ``` javascript
+        function logger(store) {
+            return function(next) {
+                return function(action) {
+                    console.log('state: ', store.getState());
+                    console.log('action: ', action);
+                    let result = next(action);
+                    console.log('next state: ', store.getState());
+                    return result;
+                }
+            }
+        }
+
+        function creshReporting(store) {
+            return function(next) {
+                return function(action) {
+                    try {
+                        return next(action);
+                    } catch (err) {
+                        console.error(err);
+                        return next;
+                    }
+                }
+            }
+        }
+    ```
+    然后假设我们在apply时这样应用一下：
+    ``` javascript
+        function applyMiddleware(store, middlewares = [logger, crashReporting]) {
+            middlewares = middlewares.slice()
+            middlewares.reverse()
+            let dispatch = store.dispatch
+            middlewares.forEach(middleware =>
+                dispatch = middleware(store)(dispatch)
+            )
+            return Object.assign({}, store, { dispatch })
+        }
+    ```
+    这样就能够进行优雅的链式调用了。并且用上ES6箭头函数后，这样写出来会更加的优雅：
+    ``` javascript
+        const logger = store => next => action => {
+            console.log('state: ', store.getState());
+            console.log('action: ', action);
+            let result = next(action);
+            console.log('next state: ', store.getState());
+            return result;
+        }
+    ```
+7. 最后，其实redux middleware使用起来其实是非常的方便的，只需要记住`applyMiddleware`这个API即可。即`const store = createStore(reducer, applyMiddleware(middlewares))`
+
 
 Reference： [Redux Middleware Doc](https://redux.js.org/advanced/middleware)
