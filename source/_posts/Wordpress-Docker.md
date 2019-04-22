@@ -39,7 +39,7 @@ docker pull wordpress
 # 参数和上面相似的就不解释了
 # --link docker 用来连接两个容器的，详细请参见官方文档
 # 环境变量的DB信息，使用上一步创建mysql时生成的进行配置
-docker run --name worepress --network=my-net -v /var/lib/wordpress-datadir:/root/wordpress-html -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=wordpressuser -e WORDPRESS_DB_PASSWORD=password -e WORDPRESS_DB_NAME=wordpressdb -p 80:80 -d wordpress
+docker run --name worepress --network=my-net -v /var/lib/wordpress-datadir:/var/www/html -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=wordpressuser -e WORDPRESS_DB_PASSWORD=password -e WORDPRESS_DB_NAME=wordpressdb -p 80:80 -d wordpress
 ```
 
 访问主机IP，看到Wordpress的安装界面即为成功。
