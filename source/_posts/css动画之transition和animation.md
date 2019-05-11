@@ -47,3 +47,56 @@ transition-delay // 默认值0
 [Height Demo](https://jsfiddle.net/TheScenery/fmwqy4pr/24/)
 
 
+## animation 使用方法
+```css
+animation: name duration timing-function delay iteration-count direction;
+// 同样也可以每个都单独设置
+animation-name // 规定需要绑定到选择器的 keyframe 名称
+animation-duration // 规定完成动画所花费的时间，以秒或毫秒计，默认0，所以省略这一项往往会没有动画效果
+animation-timing-function // 规定动画的速度曲线
+animation-delay // 规定在动画开始之前的延迟
+animation-iteration-count // 规定动画应该播放的次数,可以设置为无数次 infinite
+animation-direction // 规定是否应该轮流反向播放动画， 可以设置一些反方向什么的。
+
+
+
+// 特殊的
+animation-fill-mode //动画执行前后的样式
+
+animation-fill-mode: none //动画执行前后不改变任何样式
+animation-fill-mode: forwards //保持目标动画最后一帧的样式
+animation-fill-mode: backwards //保持目标动画第一帧的样式
+animation-fill-mode: both //动画将会执行 forwards 和 backwards 执行的动作
+```
+
+animation-name keyframes？规定一些动画执行的关键帧，这个就可以比transition更加灵活的控制整个动画的过程
+```css
+@keyframes scale {
+    from {
+        trannsform: scale(1);
+    }
+    to {
+        transform: scale(1.8);
+    }
+}
+
+
+@keyframes scale {
+    0% {
+        trannsform: scale(1);
+    }
+    30% {
+        transform: scale(1.8);
+    }
+    80% {
+        transform: scale(3);
+    }
+}
+```
+可以定义执行过重的一些元素样式，既能from to指定两个节点，也可以使用百分比来详细的设置各个时间阶段的变化。
+
+什么时候你执行动画？
+
+    1. 元素第一次加载的时候开始执行
+    2. 元素已经加载完毕，直接通过JS给起设置动画，则在刚设置完后执行
+    3. 想办法触发浏览器的重新布局，比如添加删除class， 设置deplay:none --> display: flex.之类的变化。
