@@ -44,3 +44,7 @@ JavaScript内存泄漏，通俗来讲就是JavaScript申请的变量不能被GC�
     requestAnimationFrame     cancelAnimationFrame
 
     ```
+
+4. 闭包？并不会引起内存泄漏
+
+    经过实际验证，现代浏览器中，必报并不会引起内脆泄漏。应该是个传说中的某个浏览器的BUG
