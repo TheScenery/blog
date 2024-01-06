@@ -1,0 +1,7 @@
+# If your site is in 'https', then make sure your base url isn't written using 'http' otherwise your sitemap would
+# contain http (as opposeed to https) URLs. This would affect Google indexing of your URLs.
+baseURL: "https://thescenery.github.io/"
+title: TheScenery's Blog
+theme: 'hugo-theme-flat'
+
+paginate: 6
