@@ -2,7 +2,7 @@
 title: css动画之transition和animation
 date: 2019-05-07 22:00:03
 description: transition和animation是两个在css中主要用来处理动画的属性，今天用到了，将使用过程中的一些疑惑和问题记录在这里。
-categories: ['学习']
+categories: ['充电']
 ---
 transition和animation是两个在css中主要用来处理动画的属性，今天用到了，将使用过程中的一些疑惑和问题记录在这里。
 
