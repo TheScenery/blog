@@ -2,7 +2,7 @@
 title: Flex布局整理
 date: 2018-06-16 15:06:27
 description: Flex布局，即为“弹性布局”，只要有两个基本的概念，容器、成员。
-categories: ['学习']
+categories: ['充电']
 ---
 Flex布局，即为“弹性布局”，只要有两个基本的概念，容器、成员。
 ![middleware-data-flow](/images/flex/flexbox.png)

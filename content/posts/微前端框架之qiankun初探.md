@@ -2,7 +2,7 @@
 title: 微前端框架之qiankun初探
 date: 2022-06-25 11:14:24
 description: 微前端是可以用来构建能够让多个团队独立交付项目代码的现代web app 技术，策略以及实践方法
-categories: ['学习']
+categories: ['充电']
 ---
 
 Techniques, strategies and recipes for building a <b>modern web app</b> with <b>multiple teams</b> that can <b>ship features independently</b>. ———— [Micro Frontends](https://micro-frontends.org/)
